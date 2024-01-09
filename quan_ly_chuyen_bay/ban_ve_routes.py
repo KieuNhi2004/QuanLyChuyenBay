@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from db_utils import cursor, db
 from datetime import datetime, timedelta
-import vnpay
 
 ban_ve_routes = Blueprint('ban_ve_routes', __name__)
 
@@ -27,15 +26,15 @@ def danh_sach_ban_ve():
     params = []
     if san_bay_di_selected:
         query += " WHERE chuyen_bay.san_bay_di = %s"
-        params.dat_ve_routesend(san_bay_di_selected)
+        params.append(san_bay_di_selected)
 
     if san_bay_den_selected:
         query += " AND chuyen_bay.san_bay_den = %s"
-        params.dat_ve_routesend(san_bay_den_selected)
+        params.append(san_bay_den_selected)
 
     if ngay_khoi_hanh:
         query += " AND DATE(lich_chuyen_bay.ngay_gio_khoi_hanh) LIKE %s"
-        params.dat_ve_routesend(f"{ngay_khoi_hanh}%")
+        params.append(f"{ngay_khoi_hanh}%")
     if ngay_khoi_hanh:
         if params:
             query += " AND"
@@ -67,8 +66,8 @@ def ban_ve(ma_ve, ma_lich_chuyen_bay):
             WHERE ve.ma_ve = %s
         """
         cursor.execute(query, (ma_ve,))
-        result = cursor.fetchone()
-
+        result = cursor.fetchall()[0]
+        print(result)
         if result:
             ve_chuyen_bay = result[:4]
             lich_chuyen_bay_info = result[7:13]
@@ -135,7 +134,7 @@ def ban_ve(ma_ve, ma_lich_chuyen_bay):
             WHERE ve.ma_ve = %s
         """
         cursor.execute(query, (ma_ve_post,))
-        result = cursor.fetchone()
+        result = cursor.fetchall()[0]
 
         if result:
             ve_chuyen_bay = result[:4]
@@ -207,7 +206,7 @@ def thong_tin_ve(ma_dat_ve):
         WHERE dat_ve.ma_dat_ve = %s
     """
     cursor.execute(query, (ma_dat_ve,))
-    result = cursor.fetchone()
+    result = cursor.fetchall()[0]
 
     if result:
 

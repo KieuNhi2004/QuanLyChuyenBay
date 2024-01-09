@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from db_utils import cursor, authenticate_user
-import hashlib
+from db_utils import authenticate_user
 
 authentication_routes = Blueprint('authentication_routes', __name__)
 

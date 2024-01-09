@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from db_utils import cursor, db
 from datetime import datetime, timedelta
-import vnpay
+from vnpay import vnpay
 
 dat_ve_routes = Blueprint('dat_ve_routes', __name__)
 
@@ -81,8 +81,7 @@ def vnpay_payment():
             JOIN quy_dinh ON 1=1
             WHERE ve.ma_ve = %s"""
         cursor.execute(query, (ma_ve_post,))
-        result = cursor.fetchone()
-
+        result = cursor.fetchall()[0]
         if result:
             ve_chuyen_bay = result[:4]
             lich_chuyen_bay_info = result[7:13]
@@ -122,7 +121,6 @@ def vnpay_payment():
                     # Lấy mã đặt vé vừa được chèn
                     cursor.execute("SELECT LAST_INSERT_ID()")
                     ma_dat_ve = cursor.fetchone()[0]
-                    print(ma_dat_ve)
 
                     # Thực hiện chèn dữ liệu vào bảng phuong_thuc_thanh_toan
                     cursor.execute(
@@ -147,21 +145,22 @@ def vnpay_payment():
         vnp.requestData['vnp_Version'] = '2.1.0'
         vnp.requestData['vnp_Command'] = 'pay'
         vnp.requestData['vnp_TmnCode'] = 'XSQJH4UJ'
-        vnp.requestData['vnp_Amount'] = amount
+        vnp.requestData['vnp_Amount'] = amount * 100
+        print(amount)
         vnp.requestData['vnp_CurrCode'] = 'VND'
-        vnp.requestData['vnp_TxnRef'] = ma_dat_ve
+        vnp.requestData['vnp_TxnRef'] = str(ma_dat_ve) + "-" + datetime.now().strftime('%Y%m%d%H%M%S')
         vnp.requestData['vnp_OrderInfo'] = order_desc
         vnp.requestData['vnp_OrderType'] = order_type
 
         vnp.requestData['vnp_Locale'] = language if language and language != '' else 'vn'
 
-        # Kiểm tra mã ngân hàng, nếu rỗng, khách hàng sẽ chọn ngân hàng trên VNPay
         if bank_code and bank_code != "":
             vnp.requestData['vnp_BankCode'] = bank_code
 
         vnp.requestData['vnp_CreateDate'] = datetime.now().strftime('%Y%m%d%H%M%S')  # 20150410063022
         vnp.requestData['vnp_IpAddr'] = "127.0.0.1"
-        vnp.requestData['vnp_ReturnUrl'] = url_for('vnpay_return', _external=True)  # Điều hướng sau khi thanh toán
+        vnp.requestData['vnp_ReturnUrl'] = url_for('dat_ve_routes.vnpay_return',
+                                                   _external=True)  # Điều hướng sau khi thanh toán
 
         # Tạo URL thanh toán VNPay
         vnpay_payment_url = vnp.get_payment_url('https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
@@ -183,7 +182,7 @@ def vnpay_return():
         try:
             cursor.execute(
                 "UPDATE thanh_toan SET trang_thai = %s WHERE ma_dat_ve IN (SELECT ma_dat_ve FROM dat_ve_chuyen_bay WHERE ma_ve = %s)",
-                ('Thành công', vnp_TxnRef))
+                ('Thành công', vnp_TxnRef.split("-")[0]))
             db.commit()
             flash('Cập nhật trạng thái thanh toán thành công.')
         except Exception as e:
@@ -212,7 +211,7 @@ def dat_ve(ma_ve, ma_lich_chuyen_bay):
             WHERE ve.ma_ve = %s
         """
         cursor.execute(query, (ma_ve,))
-        result = cursor.fetchone()
+        result = cursor.fetchall()[0]
 
         if result:
             ve_chuyen_bay = result[:4]
