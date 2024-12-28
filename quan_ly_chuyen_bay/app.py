@@ -14,13 +14,13 @@ app.secret_key = 'your_secret_key'
 
 # Register the authentication routes Blueprint
 app.register_blueprint(authentication_routes, url_prefix='/')
-
 app.register_blueprint(chuyen_bay_routes, url_prefix='/')
 app.register_blueprint(dat_ve_routes, url_prefix='/')
 app.register_blueprint(ban_ve_routes, url_prefix='/')
 app.register_blueprint(lich_chuyen_bay_routes, url_prefix='/')
 app.register_blueprint(ve_chuyen_bay_routes, url_prefix='/')
 app.register_blueprint(quy_dinh_routes, url_prefix='/')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

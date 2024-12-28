@@ -111,7 +111,7 @@ def vnpay_payment():
                 booked_seats_hang_2 = cursor.fetchone()[0]
 
                 # Kiểm tra số ghế còn trống
-                if ve_chuyen_bay[3] > 0 and booked_seats_hang_1 < so_ghe_hang_1 and booked_seats_hang_2 < so_ghe_hang_2:
+                if ve_chuyen_bay[3] > 0 and ((booked_seats_hang_1 < so_ghe_hang_1 and ve_chuyen_bay[2]=='Hạng 1') or (booked_seats_hang_2 < so_ghe_hang_2 and ve_chuyen_bay[2]=='Hạng 2')):
                     # Thực hiện chèn dữ liệu vào bảng dat_ve_chuyen_bay và lấy mã đặt vé
                     cursor.execute(
                         "INSERT INTO dat_ve_chuyen_bay (ho_ten, cmnd_cccd, so_dien_thoai, ma_ve, ma_lich_chuyen_bay) VALUES (%s, %s, %s, %s, %s)",
@@ -244,7 +244,7 @@ def dat_ve(ma_ve, ma_lich_chuyen_bay):
                 booked_seats_hang_2 = cursor.fetchone()[0]
 
                 # Kiểm tra số ghế còn trống
-                if ve_chuyen_bay[3] > 0 and booked_seats_hang_1 < so_ghe_hang_1 and booked_seats_hang_2 < so_ghe_hang_2:
+                if ve_chuyen_bay[3] > 0 and ((booked_seats_hang_1 < so_ghe_hang_1 and ve_chuyen_bay[2]=='Hạng 1') or (booked_seats_hang_2 < so_ghe_hang_2 and ve_chuyen_bay[2]=='Hạng 2')):
                     return render_template('dat_ve.html', ve_chuyen_bay=ve_chuyen_bay,
                                            ma_lich_chuyen_bay=ma_lich_chuyen_bay, quyen=quyen)
                 else:
