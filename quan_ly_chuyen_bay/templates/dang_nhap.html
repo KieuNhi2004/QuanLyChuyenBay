@@ -6,6 +6,34 @@
     <title>Đăng Nhập</title>
     <!-- Link đến các tệp CSS của Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Thêm ảnh nền cho toàn bộ trang */
+        body {
+            background-image: url('https://media.cntraveler.com/photos/66293dfd34a3637c2f7e88b4/16:9/w_2560%2Cc_limit/GettyImages-959651044.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;  /* Căn giữa thẻ container theo chiều ngang */
+            align-items: center;    /* Căn giữa thẻ container theo chiều dọc */
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.3); /* Nền trong suốt với độ mờ thấp */
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px; /* Điều chỉnh chiều rộng của container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng cho container */
+            position: relative;
+        }
+        .btn-group {
+            width:100%; /* Đảm bảo các nút chiếm toàn bộ chiều rộng */
+        }
+        .btn-group .btn {
+            flex: 1; /* Chia đều không gian cho các nút */
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-5">
@@ -22,13 +50,14 @@
             <input type="password" class="form-control" id="mat_khau" name="mat_khau" required>
         </div>
 
-        <!-- Nút Đăng Nhập -->
-        <button type="submit" class="btn btn-primary">Đăng nhập</button>
-        <!-- Nút Trở Về -->
-        <a href="{{ url_for('authentication_routes.index') }}" class="btn btn-secondary">Trở về trang chủ</a>
+        <!-- Nhóm nút đăng nhập và trở về trang chủ -->
+        <div class="btn-group d-flex">
+            <!-- Nút Đăng Nhập -->
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+            <!-- Nút Trở Về -->
+            <a href="{{ url_for('authentication_routes.index') }}" class="btn btn-secondary">Trở về trang chủ</a>
+        </div>
     </form>
-
-
 </div>
 
 <!-- Link đến các tệp JS của Bootstrap (Cần phải đặt ở dưới cùng của trang) -->

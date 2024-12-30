@@ -1,5 +1,6 @@
 {% extends 'layout/base.html' %}
 {% block content %}
+
 <h1 class="text-center text-uppercase">Bán vé chuyến bay</h1>
 <form method="post"
       action="{{ url_for('ban_ve_routes.ban_ve', ma_ve=ve_chuyen_bay[0], ma_lich_chuyen_bay=ma_lich_chuyen_bay) }}"

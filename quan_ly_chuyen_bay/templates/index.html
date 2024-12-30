@@ -6,33 +6,56 @@
     <title>Trang chuyển hướng</title>
     <!-- Link đến các tệp CSS của Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Thêm Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-image: url('https://img.freepik.com/premium-photo/abstract-sky-background-gradient-pastel_6529-1829.jpg?semt=ais_hybrid');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .d-flex.flex-column .card {
+            width: 100%; /* Đặt chiều rộng tối đa */
+            max-width: 400px; /* Giới hạn chiều rộng của từng thẻ */
+            margin: 0 auto; /* Căn giữa thẻ */
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-5">
     <h2 class="mb-4 text-center text-uppercase">Chuyển hướng đến</h2>
-    <div class="row">
-        <div class="col-md-6">
+    <div class="d-flex flex-column align-items-center">
+        <!-- Khách hàng -->
+        <div class="col-md-6 mb-4">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body text-center">
                     <h5 class="card-title">Khách hàng</h5>
                     <p class="card-text">Chuyển hướng đến trang khách hàng.</p>
-                    <a href="{{ url_for('dat_ve_routes.danh_sach_dat_ve') }}" class="btn btn-primary">Chuyển hướng</a>
+                    <a href="{{ url_for('dat_ve_routes.danh_sach_dat_ve') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
                 </div>
             </div>
         </div>
+        <!-- Người dùng -->
         <div class="col-md-6">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body text-center">
                     <h5 class="card-title">Người dùng</h5>
                     <p class="card-text">Chuyển hướng đến trang người dùng.</p>
-                    <a href="{{ url_for('authentication_routes.dang_nhap') }}" class="btn btn-primary">Chuyển hướng</a>
+                    <a href="{{ url_for('authentication_routes.dang_nhap') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Link đến các tệp JS của Bootstrap (Cần phải đặt ở dưới cùng của trang) -->
+<!-- Link đến các tệp JS của Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

@@ -1,5 +1,10 @@
 {% extends 'layout/base.html' %}
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
+
 <h2 class="text-center mb-4">Báo Cáo Doanh Thu Theo Tháng</h2>
 
 <form id="monthForm">
@@ -9,16 +14,17 @@
     </div>
     <button type="button" onclick="getChartData()" class="btn btn-primary">Xem Báo Cáo</button>
     <button type="button" onclick="exportReport()" class="btn btn-success ml-2">Xuất Báo Cáo</button>
+    <button type="button" onclick="viewStatistics()" class="btn btn-info ml-2">Xem Thống Kê</button>
 </form>
 
 <div class="mt-4 report">
     <canvas id="revenueChart"></canvas>
     <canvas id="hiddenChart" style="display: none; max-width: 500px;"></canvas>
 </div>
-</div>
 
 <script>
-    function getChartData() {
+    // Hàm xem thống kê
+    function viewStatistics() {
         var selectedMonth = document.getElementById('selectedMonth').value;
         var formData = new FormData();
         formData.append('selected_month', selectedMonth);
@@ -29,45 +35,74 @@
         })
         .then(response => response.json())
         .then(data => {
+            renderStatistics(data);
+        });
+    }
+
+    // Hàm tạo bảng thống kê
+    function renderStatistics(data) {
+        var tableHtml = `
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>Sân bay Đi</th>
+                        <th>Sân bay Đến</th>
+                        <th>Doanh Thu</th>
+                        <th>Tỷ lệ (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        // Duyệt qua dữ liệu và tạo các dòng bảng
+        data.labels.forEach((label, index) => {
+            tableHtml += `
+                <tr>
+                    <td>${label.split(" - ")[0]}</td>
+                    <td>${label.split(" - ")[1]}</td>
+                    <td>${data.data[index]}</td>
+                    <td>${data.percentages[index]}%</td>
+                </tr>
+            `;
+        });
+
+        tableHtml += `
+                </tbody>
+            </table>
+        `;
+
+        // Hiển thị bảng vào trong phần tử HTML
+        document.querySelector('.report').innerHTML = tableHtml;
+    }
+
+    // Hàm lấy dữ liệu biểu đồ
+    function getChartData() {
+        var selectedMonth = document.getElementById('selectedMonth').value;
+        var formData = new FormData();
+        formData.append('selected_month', selectedMonth);
+
+        fetch('/doanh_thu_theo_thang', {
+            method: 'POST',
+            body: formData
+        })
+    .then(response => response.json())
+        .then(data => {
             renderChart(data);
         });
     }
 
+    // Hàm tạo biểu đồ
     function renderChart(data) {
         var canvas = document.getElementById('revenueChart');
         var ctx = canvas.getContext('2d');
 
-        // Clear the existing chart
-        Chart.helpers.each(Chart.instances, function(instance) {
-            instance.destroy();
-        });
+        // Clear any existing chart
+        if (window.chartInstance) {
+            window.chartInstance.destroy();
+        }
 
-        // Create a new chart
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.labels,
-                datasets: [{
-                    label: 'Doanh Thu',
-                    data: data.data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Draw the chart on the hidden canvas
-        var hiddenCanvas = document.getElementById('hiddenChart');
-        var hiddenCtx = hiddenCanvas.getContext('2d');
-        var chart = new Chart(hiddenCtx, {
+        // Tạo biểu đồ mới
+        window.chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: data.labels,
@@ -88,43 +123,40 @@
             }
         });
     }
-    
- function exportReport() {
-    var selectedMonth = document.getElementById('selectedMonth').value;
-    var canvas = document.getElementById('hiddenChart');
-    var chart = Chart.getChart(canvas);
 
-    // Get the base64-encoded image data
-    var chartImage = chart.toBase64Image();
+    // Hàm xuất báo cáo PDF
+    function exportReport() {
+        var selectedMonth = document.getElementById('selectedMonth').value;
+        var canvas = document.getElementById('hiddenChart');
+        var chart = Chart.getChart(canvas);
 
-    // Create an image element to hold the chart image
-    var chartImageElement = document.createElement('img');
-    chartImageElement.src = chartImage;
+        // Tạo hình ảnh base64 từ biểu đồ
+        var chartImage = chart.toBase64Image();
 
-    // Create a container for the exported content
-    var exportContainer = document.createElement('div');
+        // Tạo phần tử chứa báo cáo
+        var exportContainer = document.createElement('div');
 
-    var titleElement = document.createElement('h2');
-    titleElement.textContent = 'Báo Cáo Doanh Thu Theo Tháng';
-    exportContainer.appendChild(titleElement);
+        var titleElement = document.createElement('h2');
+        titleElement.textContent = 'Báo Cáo Doanh Thu Theo Tháng';
+        exportContainer.appendChild(titleElement);
 
-    var monthElement = document.createElement('p');
-    monthElement.textContent = 'Tháng: ' + selectedMonth;
-    exportContainer.appendChild(monthElement);
+        var monthElement = document.createElement('p');
+        monthElement.textContent = 'Tháng: ' + selectedMonth;
+        exportContainer.appendChild(monthElement);
 
-    // Append the chart image element to the container
-    exportContainer.appendChild(chartImageElement);
+        // Thêm hình ảnh biểu đồ vào báo cáo
+        var chartImageElement = document.createElement('img');
+        chartImageElement.src = chartImage;
+        exportContainer.appendChild(chartImageElement);
 
-    var pdfOptions = {
-        margin: 10,
-        filename: 'BaoCao.pdf',
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    };
+        var pdfOptions = {
+            margin: 10,
+            filename: 'BaoCao.pdf',
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        };
 
-    // Use html2pdf to export the container with the chart image
-    html2pdf(exportContainer, pdfOptions);
-}
-
+        // Xuất PDF với html2pdf
+        (exportContainer, pdfOptions);
+    }
 </script>
-
 {% endblock %}
