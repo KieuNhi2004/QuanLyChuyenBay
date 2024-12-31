@@ -5,21 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fca27a9-4970-4134-a0a8-6a0b64a74703" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../bang.mwb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/ban_ve.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ban_ve.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dang_nhap.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dang_nhap.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/danh_sach_ban_ve.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/danh_sach_ban_ve.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/danh_sach_chuyen_bay.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/danh_sach_chuyen_bay.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/danh_sach_dat_ve.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/danh_sach_dat_ve.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dat_ve.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dat_ve.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ban_ve_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/ban_ve_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dat_ve_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/dat_ve_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tempCodeRunnerFile.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/doanh_thu_theo_thang.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/doanh_thu_theo_thang.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/layout/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sua_lich_chuyen_bay.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sua_lich_chuyen_bay.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/thay_doi_quy_dinh.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/thay_doi_quy_dinh.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/trang_admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/trang_admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/trang_nhan_vien.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/trang_nhan_vien.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/quan_ly_chuyen_bay_code.sql" beforeDir="false" afterPath="$PROJECT_DIR$/utils/quan_ly_chuyen_bay_code.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,17 +145,6 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/db_utils.py</url>
-          <line>14</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/quan_ly_chuyen_bay$app.coverage" NAME="app Coverage Results" MODIFIED="1735140424752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

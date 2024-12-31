@@ -1,18 +1,4 @@
-CREATE TABLE quy_dinh (
-    ma_quy_dinh INT AUTO_INCREMENT PRIMARY KEY,
-    so_luong_san_bay INT,
-    thoi_gian_bay_toi_thieu INT,
-    so_san_bay_trung_gian_toi_da INT,
-    thoi_gian_dung_toi_thieu INT,
-    thoi_gian_dung_toi_da INT,
-    so_gio_dat_ve_truoc INT,
-    so_gio_ban_ve_truoc INT
-);
-INSERT INTO quy_dinh 
-(so_luong_san_bay, thoi_gian_bay_toi_thieu, so_san_bay_trung_gian_toi_da, 
-thoi_gian_dung_toi_thieu, thoi_gian_dung_toi_da, so_gio_dat_ve_truoc, so_gio_ban_ve_truoc)
-VALUES
-(10, 30, 2, 20, 30, 12, 4);
+
 
 CREATE TABLE nguoi_dung (
     ma_nguoi_dung VARCHAR(10) PRIMARY KEY,
@@ -32,7 +18,7 @@ CREATE TABLE san_bay (
     tinh_thanh VARCHAR(30) NOT NULL,
     quoc_gia VARCHAR(30) NOT NULL
 );
-INSERT INTO san_bay 
+INSERT INTO san_bay
 (ma_san_bay, ten_san_bay, tinh_thanh, quoc_gia)
 VALUES
 ('SGN', N'Sân bay Tân Sơn Nhất', N'TP.Hồ Chí Minh', N'Việt Nam'),
@@ -53,7 +39,7 @@ CREATE TABLE chuyen_bay (
     FOREIGN KEY (san_bay_di) REFERENCES san_bay(ma_san_bay),
     FOREIGN KEY (san_bay_den) REFERENCES san_bay(ma_san_bay)
 );
-INSERT INTO chuyen_bay 
+INSERT INTO chuyen_bay
 (ma_chuyen_bay, san_bay_di, san_bay_den)
 VALUES
 ('VN1200', 'SGN', 'HAN'),
@@ -91,14 +77,14 @@ CREATE TABLE lich_chuyen_bay (
     FOREIGN KEY (ma_chuyen_bay) REFERENCES chuyen_bay(ma_chuyen_bay) ON DELETE CASCADE
 );
 
-INSERT INTO lich_chuyen_bay 
+INSERT INTO lich_chuyen_bay
 (ma_chuyen_bay, ngay_gio_khoi_hanh, thoi_gian_bay_phut, so_ghe_hang_1, so_ghe_hang_2)
 VALUES
-('VN1200', '2024-01-10 08:00:00', 120, 50, 100),
-('VN1201', '2024-01-11 10:30:00', 90, 30, 80),
-('VN1202', '2024-01-12 15:45:00', 60, 20, 50),
-('VN1203', '2024-01-13 12:15:00', 75, 40, 60),
-('VN1204', '2024-01-14 09:20:00', 120, 60, 90);
+('VN1200', '2025-01-03 08:00:00', 120, 50, 100),
+('VN1201', '2025-01-04 10:30:00', 90, 30, 80),
+('VN1202', '2025-01-06 15:45:00', 60, 20, 50),
+('VN1203', '2025-01-07 12:15:00', 75, 40, 60),
+('VN1204', '2025-01-08 09:20:00', 120, 60, 90);
 
 CREATE TABLE san_bay_trung_gian (
     stt INT NOT NULL,
@@ -110,7 +96,7 @@ CREATE TABLE san_bay_trung_gian (
     FOREIGN KEY (ma_lich_chuyen_bay) REFERENCES lich_chuyen_bay(ma_lich_chuyen_bay) ON DELETE CASCADE,
     FOREIGN KEY (san_bay_trung_gian) REFERENCES san_bay(ma_san_bay)
 );
-INSERT INTO san_bay_trung_gian 
+INSERT INTO san_bay_trung_gian
 (stt, ma_lich_chuyen_bay, san_bay_trung_gian, thoi_gian_dung_phut, ghi_chu)
 VALUES
 (1, 1, 'DAD', 30, N'Dừng chân tại Đà Nẵng'),
@@ -161,7 +147,7 @@ CREATE TABLE thanh_toan (
     pttt VARCHAR(50) NOT NULL,
     trang_thai VARCHAR(50),
     so_tien BIGINT DEFAULT 0,
-    ma_dat_ve INT,
+    ma_dat_ve INT UNIQUE,
     FOREIGN KEY (ma_dat_ve) REFERENCES dat_ve_chuyen_bay(ma_dat_ve) ON DELETE CASCADE
 );
 
@@ -187,3 +173,23 @@ VALUES
 ('Tiền mặt', 'Đang xử lý', 18, 750000),
 ('Ví điện tử', 'Thành công', 19, 1600000),
 ('Thẻ tín dụng', 'Đang xử lý', 20, 850000);
+
+CREATE TABLE quy_dinh (
+    ma_quy_dinh INT AUTO_INCREMENT PRIMARY KEY,
+    so_luong_san_bay INT,
+    thoi_gian_bay_toi_thieu INT,
+    so_san_bay_trung_gian_toi_da INT,
+    thoi_gian_dung_toi_thieu INT,
+    thoi_gian_dung_toi_da INT,
+    so_gio_dat_ve_truoc INT,
+    so_gio_ban_ve_truoc INT,
+    ma_dat_ve INT,
+    ma_nguoi_dung VARCHAR(10),
+    FOREIGN KEY (ma_dat_ve) REFERENCES dat_ve_chuyen_bay(ma_dat_ve) ON DELETE CASCADE,
+    FOREIGN KEY (ma_nguoi_dung) REFERENCES nguoi_dung(ma_nguoi_dung)  ON DELETE CASCADE
+);
+INSERT INTO quy_dinh
+(so_luong_san_bay, thoi_gian_bay_toi_thieu, so_san_bay_trung_gian_toi_da,
+thoi_gian_dung_toi_thieu, thoi_gian_dung_toi_da, so_gio_dat_ve_truoc, so_gio_ban_ve_truoc)
+VALUES
+(10, 30, 2, 20, 30, 12, 4);

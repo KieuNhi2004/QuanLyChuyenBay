@@ -75,7 +75,7 @@ def ban_ve(ma_ve, ma_lich_chuyen_bay):
             quy_dinh_info = result[13:]
 
             # Kiểm tra còn ghế hay không
-            so_gio_ban_ve_truoc = quy_dinh_info[-1]
+            so_gio_ban_ve_truoc = quy_dinh_info[-3]
 
             thoi_gian_ban_ve_truoc = lich_chuyen_bay_info[1] - timedelta(hours=so_gio_ban_ve_truoc)
             print(thoi_gian_ban_ve_truoc)
@@ -142,7 +142,7 @@ def ban_ve(ma_ve, ma_lich_chuyen_bay):
             quy_dinh_info = result[13:]
 
             # Kiểm tra thời gian bán vé
-            so_gio_ban_ve_truoc = quy_dinh_info[-1]
+            so_gio_ban_ve_truoc = quy_dinh_info[-3]
             thoi_gian_ban_ve_truoc = lich_chuyen_bay_info[1] - timedelta(hours=so_gio_ban_ve_truoc)
 
             if datetime.now() < thoi_gian_ban_ve_truoc:

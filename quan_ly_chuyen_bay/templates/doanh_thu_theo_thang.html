@@ -1,9 +1,7 @@
 {% extends 'layout/base.html' %}
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
-
 
 <h2 class="text-center mb-4">Báo Cáo Doanh Thu Theo Tháng</h2>
 
@@ -23,7 +21,6 @@
 </div>
 
 <script>
-    // Hàm xem thống kê
     function viewStatistics() {
         var selectedMonth = document.getElementById('selectedMonth').value;
         var formData = new FormData();
@@ -39,7 +36,6 @@
         });
     }
 
-    // Hàm tạo bảng thống kê
     function renderStatistics(data) {
         var tableHtml = `
             <table class="table table-bordered mt-4">
@@ -54,7 +50,6 @@
                 <tbody>
         `;
 
-        // Duyệt qua dữ liệu và tạo các dòng bảng
         data.labels.forEach((label, index) => {
             tableHtml += `
                 <tr>
@@ -71,11 +66,9 @@
             </table>
         `;
 
-        // Hiển thị bảng vào trong phần tử HTML
         document.querySelector('.report').innerHTML = tableHtml;
     }
 
-    // Hàm lấy dữ liệu biểu đồ
     function getChartData() {
         var selectedMonth = document.getElementById('selectedMonth').value;
         var formData = new FormData();
@@ -85,25 +78,22 @@
             method: 'POST',
             body: formData
         })
-    .then(response => response.json())
+        .then(response => response.json())
         .then(data => {
             renderChart(data);
         });
     }
 
-    // Hàm tạo biểu đồ
     function renderChart(data) {
         var canvas = document.getElementById('revenueChart');
         var ctx = canvas.getContext('2d');
 
-        // Clear any existing chart
         if (window.chartInstance) {
-            window.chartInstance.destroy();
+window.chartInstance.destroy();
         }
 
-        // Tạo biểu đồ mới
         window.chartInstance = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: data.labels,
                 datasets: [{
@@ -111,7 +101,37 @@
                     data: data.data,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var hiddenCanvas = document.getElementById('hiddenChart');
+        var hiddenCtx = hiddenCanvas.getContext('2d');
+
+        if (window.hiddenChartInstance) {
+            window.hiddenChartInstance.destroy();
+        }
+
+        window.hiddenChartInstance = new Chart(hiddenCtx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Doanh Thu',
+                    data: data.data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: true
                 }]
             },
             options: {
@@ -124,16 +144,18 @@
         });
     }
 
-    // Hàm xuất báo cáo PDF
     function exportReport() {
         var selectedMonth = document.getElementById('selectedMonth').value;
         var canvas = document.getElementById('hiddenChart');
-        var chart = Chart.getChart(canvas);
+        var chart = window.hiddenChartInstance;
 
-        // Tạo hình ảnh base64 từ biểu đồ
+        if (!chart) {
+            alert('Biểu đồ chưa được tạo. Vui lòng tạo biểu đồ trước khi xuất báo cáo.');
+            return;
+        }
+
         var chartImage = chart.toBase64Image();
 
-        // Tạo phần tử chứa báo cáo
         var exportContainer = document.createElement('div');
 
         var titleElement = document.createElement('h2');
@@ -144,7 +166,6 @@
         monthElement.textContent = 'Tháng: ' + selectedMonth;
         exportContainer.appendChild(monthElement);
 
-        // Thêm hình ảnh biểu đồ vào báo cáo
         var chartImageElement = document.createElement('img');
         chartImageElement.src = chartImage;
         exportContainer.appendChild(chartImageElement);
@@ -155,8 +176,7 @@
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         };
 
-        // Xuất PDF với html2pdf
-        (exportContainer, pdfOptions);
+        html2pdf().set(pdfOptions).from(exportContainer).save();
     }
 </script>
 {% endblock %}

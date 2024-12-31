@@ -88,7 +88,7 @@ def vnpay_payment():
             quy_dinh_info = result[13:]
 
             # Kiểm tra thời gian đặt vé
-            so_gio_dat_ve_truoc = quy_dinh_info[-2]
+            so_gio_dat_ve_truoc = quy_dinh_info[-4]
             thoi_gian_dat_ve = lich_chuyen_bay_info[1] - timedelta(hours=so_gio_dat_ve_truoc)
 
             if datetime.now() < thoi_gian_dat_ve:
@@ -220,7 +220,7 @@ def dat_ve(ma_ve, ma_lich_chuyen_bay):
             quy_dinh_info = result[13:]
 
             # Kiểm tra còn ghế hay không
-            so_gio_dat_ve_truoc = quy_dinh_info[-2]
+            so_gio_dat_ve_truoc = quy_dinh_info[-4]
 
             thoi_gian_dat_ve = lich_chuyen_bay_info[1] - timedelta(hours=so_gio_dat_ve_truoc)
 
